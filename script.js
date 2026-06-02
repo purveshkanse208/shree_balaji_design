@@ -5,31 +5,39 @@
 const menuBtn = document.querySelector(".menu-btn");
 const navLinks = document.querySelector(".nav-links");
 
-menuBtn.addEventListener("click", () => {
-    navLinks.classList.toggle("active");
-});
+if (menuBtn && navLinks) {
 
-/* ==========================
-   CLOSE MENU ON CLICK
-========================== */
-
-document.querySelectorAll(".nav-links a").forEach(link => {
-
-    link.addEventListener("click", () => {
-        navLinks.classList.remove("active");
+    menuBtn.addEventListener("click", () => {
+        navLinks.classList.toggle("active");
     });
 
-});
+    document.querySelectorAll(".nav-links a").forEach(link => {
+        link.addEventListener("click", () => {
+            navLinks.classList.remove("active");
+        });
+    });
+
+    document.addEventListener("click", (e) => {
+        if (
+            !menuBtn.contains(e.target) &&
+            !navLinks.contains(e.target)
+        ) {
+            navLinks.classList.remove("active");
+        }
+    });
+}
 
 /* ==========================
    NAVBAR SCROLL EFFECT
 ========================== */
 
+const navbar = document.querySelector(".navbar");
+
 window.addEventListener("scroll", () => {
 
-    const navbar = document.querySelector(".navbar");
+    if (!navbar) return;
 
-    if(window.scrollY > 50){
+    if (window.scrollY > 50) {
 
         navbar.style.background = "#000";
         navbar.style.boxShadow =
@@ -42,7 +50,6 @@ window.addEventListener("scroll", () => {
 
         navbar.style.boxShadow = "none";
     }
-
 });
 
 /* ==========================
@@ -58,14 +65,9 @@ window.addEventListener("scroll", () => {
 
     sections.forEach(section => {
 
-        const sectionTop =
-        section.offsetTop - 150;
+        const sectionTop = section.offsetTop - 150;
 
-        const sectionHeight =
-        section.clientHeight;
-
-        if(scrollY >= sectionTop){
-
+        if (window.scrollY >= sectionTop) {
             current = section.getAttribute("id");
         }
 
@@ -75,11 +77,10 @@ window.addEventListener("scroll", () => {
 
         link.classList.remove("active-link");
 
-        if(
-            link.getAttribute("href")
-            .includes(current)
-        ){
-
+        if (
+            current &&
+            link.getAttribute("href").includes(current)
+        ) {
             link.classList.add("active-link");
         }
 
@@ -94,26 +95,35 @@ window.addEventListener("scroll", () => {
 const counters =
 document.querySelectorAll(".stat-box h2");
 
-const startCounter = () => {
+let counterStarted = false;
+
+function startCounter() {
 
     counters.forEach(counter => {
 
+        const original =
+        counter.innerText;
+
         const target =
-        parseInt(counter.innerText);
+        parseInt(original);
 
         let count = 0;
 
-        const increment =
-        target / 100;
+        const increment = target / 100;
 
-        const updateCounter = () => {
+        function updateCounter() {
 
-            if(count < target){
+            if (count < target) {
 
                 count += increment;
 
-                counter.innerText =
-                Math.ceil(count) + "+";
+                if (target === 99) {
+                    counter.innerText =
+                    Math.ceil(count) + "%";
+                } else {
+                    counter.innerText =
+                    Math.ceil(count) + "+";
+                }
 
                 requestAnimationFrame(
                     updateCounter
@@ -121,41 +131,39 @@ const startCounter = () => {
 
             } else {
 
-                if(target === 99){
-
+                if (target === 99) {
                     counter.innerText = "99%";
-
                 } else {
-
                     counter.innerText =
                     target + "+";
                 }
             }
-        };
+        }
 
         updateCounter();
 
     });
 
-};
-
-let counterStarted = false;
+}
 
 window.addEventListener("scroll", () => {
 
     const statsSection =
     document.querySelector(".stats");
 
+    if (!statsSection) return;
+
     const statsTop =
     statsSection.offsetTop - 400;
 
-    if(
+    if (
         window.scrollY > statsTop &&
         !counterStarted
-    ){
+    ) {
 
         startCounter();
         counterStarted = true;
+
     }
 
 });
@@ -166,21 +174,20 @@ window.addEventListener("scroll", () => {
 
 const revealElements =
 document.querySelectorAll(
-".service-card, .project-card, .about-content, .about-image, .process-box, .testimonial-card, .info-box"
+".service-card, .project-card, .about-content, .about-image, .process-box, .testimonial-card"
 );
 
-function reveal(){
+function reveal() {
 
     revealElements.forEach(element => {
-
-        const windowHeight =
-        window.innerHeight;
 
         const revealTop =
         element.getBoundingClientRect().top;
 
-        if(revealTop < windowHeight - 100){
+        const windowHeight =
+        window.innerHeight;
 
+        if (revealTop < windowHeight - 100) {
             element.classList.add("show");
         }
 
@@ -192,30 +199,62 @@ window.addEventListener("scroll", reveal);
 reveal();
 
 /* ==========================
-   FORM SUBMIT DEMO
+   CONTACT FORM VALIDATION
 ========================== */
 
 const form =
 document.querySelector("form");
 
-if(form){
+if (form) {
 
-form.addEventListener("submit", (e)=>{
+    form.addEventListener("submit", (e) => {
 
-    e.preventDefault();
+        e.preventDefault();
 
-    alert(
-    "Thank you! Your message has been sent successfully."
-    );
+        const name =
+        form.querySelector(
+        'input[placeholder="Your Name"]'
+        );
 
-    form.reset();
+        const email =
+        form.querySelector(
+        'input[type="email"]'
+        );
 
-});
+        const subject =
+        form.querySelector(
+        'input[placeholder="Subject"]'
+        );
+
+        const message =
+        form.querySelector("textarea");
+
+        if (
+            !name.value.trim() ||
+            !email.value.trim() ||
+            !subject.value.trim() ||
+            !message.value.trim()
+        ) {
+
+            alert(
+            "Please fill all fields before sending."
+            );
+
+            return;
+        }
+
+        alert(
+        "Thank you! Your message has been sent successfully."
+        );
+
+        form.reset();
+
+    });
 
 }
 
 /* ==========================
-   PRELOADER EFFECT
+   PAGE LOAD EFFECT
 ========================== */
 
 window.addEventListener("load", () => {
@@ -229,6 +268,6 @@ window.addEventListener("load", () => {
 
         document.body.style.opacity = "1";
 
-    },100);
+    }, 100);
 
 });
