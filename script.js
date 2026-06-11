@@ -271,3 +271,97 @@ window.addEventListener("load", () => {
     }, 100);
 
 });
+
+const galleries = {
+
+    logo: [
+    "logo/logo1.jpg",
+    "logo/logo2.jpg",
+    "logo/logo3.jpg",
+    "logo/logo4.jpg",
+    "logo/logo5.jpg"
+    ],
+    
+    brand: [
+    "brand/brand1.jpg",
+    "brand/brand2.jpg",
+    "brand/brand3.png",
+    "brand/brand4.png",
+    "brand/brand5.jpg"
+    ],
+
+    social: [
+    "social/social1.jpg",
+    "social/social2.jpg",
+    "social/social3.png",
+    "social/social4.png",
+    "social/social5.jpg"
+    ],
+        
+    video: [
+        "video/video5.jpeg",
+        "video/video1.jpeg",
+        "video/video2.jpg",
+        "video/video3.jpg",
+        "video/video4.jpg",
+    ],
+
+    website: [
+    "website/website1.jpg",
+    "website/website3.png",
+    "website/website4.png",
+    "website/website5.jpg",
+    "website/website2.jpg",
+
+    ],
+        
+    marketing: [
+    "marketing/marketing3.jpg",
+    "marketing/marketing4.jpg",
+    "marketing/marketing1.jpg",
+    "marketing/marketing2.png",
+    "marketing/marketing5.jpg",
+    ]
+    };
+    
+    let currentGallery = [];
+    let currentIndex = 0;
+    
+    function openGallery(type){
+    
+    currentGallery = galleries[type];
+    currentIndex = 0;
+    
+    document.getElementById("galleryModal").style.display="flex";
+    
+    document.getElementById("galleryImage").src =
+    currentGallery[currentIndex];
+    }
+    
+    function closeGallery(){
+    document.getElementById("galleryModal").style.display="none";
+    }
+    
+    function nextImage(){
+    
+    currentIndex++;
+    
+    if(currentIndex >= currentGallery.length){
+    currentIndex = 0;
+    }
+    
+    document.getElementById("galleryImage").src =
+    currentGallery[currentIndex];
+    }
+    
+    function prevImage(){
+    
+    currentIndex--;
+    
+    if(currentIndex < 0){
+    currentIndex = currentGallery.length - 1;
+    }
+    
+    document.getElementById("galleryImage").src =
+    currentGallery[currentIndex];
+    }
