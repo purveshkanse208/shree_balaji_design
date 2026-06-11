@@ -1153,3 +1153,6 @@ section{
         grid-template-columns:1fr;
     }
     }
+html{
+    scroll-behavior:smooth;
+}
